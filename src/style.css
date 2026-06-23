@@ -1,0 +1,867 @@
+/* =========================================================
+   1. ПАЛИТРА ЦВЕТОВ И ПЕРЕМЕННЫЕ
+   ========================================================= */
+:root {
+    --app-bg: #ffffff;
+    --bar-bg: #ffffff;
+    --element-bg: #f4f4f4;
+    --element-hover: #e8e8e8;
+    --text-color: #666666;
+    --text-active: #000000;
+    --icon-color: #333333;
+    --fav-bg: #fff9db;
+    --fav-stroke: #f9e052;
+
+    --capsule-radius: 10px;
+    --capsule-border: #e2e2e2;
+}
+
+body.dark-theme {
+    --app-bg: #1c1c1e;
+    --bar-bg: #1c1c1e;
+    --element-bg: #3a3a3c;
+    --element-hover: #48484a;
+    --text-color: #a1a1a6;
+    --text-active: #f5f5f7;
+    --icon-color: #f5f5f7;
+    --fav-bg: #3d3d2b;
+    --fav-stroke: #d4b830;
+
+    --capsule-border: #555555;
+}
+
+/* =========================================================
+   2. БАЗОВЫЕ СТИЛИ (Выжжены все скроллбары)
+   ========================================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
+}
+
+::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+html,
+body {
+    background-color: transparent !important;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden !important;
+    font-family:
+        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+        sans-serif;
+    user-select: none;
+}
+
+.app-container {
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--app-bg) !important;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    transition: background-color 0.2s;
+}
+
+/* =========================================================
+   3. ВЕРХНЯЯ И НИЖНЯЯ ПАНЕЛИ
+   ========================================================= */
+.top-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 38px;
+    background-color: transparent;
+    z-index: 9999 !important;
+    padding-left: 80px;
+}
+
+.traffic-lights {
+    display: flex;
+    gap: 8px;
+    -webkit-app-region: no-drag;
+}
+.mac-btn {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+.mac-btn:hover {
+    opacity: 0.8;
+}
+.mac-btn.close {
+    background-color: #ff5f56;
+}
+.mac-btn.minimize {
+    background-color: #ffbd2e;
+}
+.mac-btn.maximize {
+    background-color: #27c93f;
+}
+.drag-region {
+    flex: 1;
+    height: 100%;
+    -webkit-app-region: drag;
+}
+
+.bottom-bar-wrapper {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 48px;
+    background-color: var(--bar-bg);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    z-index: 9998;
+    transition: background-color 0.2s;
+}
+
+/* =========================================================
+   4. КАПСУЛЫ УПРАВЛЕНИЯ И НАСТРОЙКИ
+   ========================================================= */
+.capsule-bar {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    gap: 12px;
+}
+.nav-group {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+/* Разделитель */
+.divider {
+    width: 1.5px;
+    height: 24px;
+    background-color: var(--capsule-border);
+    border-radius: 2px;
+    margin: 0 10px;
+    flex-shrink: 0;
+    transition: background-color 0.2s;
+}
+
+.search-capsule {
+    background-color: var(--element-bg);
+    height: 28px;
+    border-radius: var(--capsule-radius);
+    border: 1px solid var(--capsule-border);
+    display: flex;
+    align-items: center;
+    padding: 0;
+    width: 36px;
+    min-width: 36px;
+    flex-shrink: 0;
+    transition:
+        width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+        padding 0.3s,
+        background-color 0.2s,
+        border-color 0.2s;
+    overflow: hidden;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23333333' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'%3E%3C/circle%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'%3E%3C/line%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+}
+body.dark-theme .search-capsule {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23f5f5f7' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'%3E%3C/circle%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'%3E%3C/line%3E%3C/svg%3E");
+}
+.search-capsule:focus-within {
+    width: 180px;
+    /* Даем 32px отступа справа, чтобы текст не залезал под лупу */
+    padding: 0 32px 0 14px;
+    /* Прибиваем лупу вправо с отступом 10px */
+    background-position: right 10px center !important;
+    /* Заставляем иконку остаться (в светлой и темной теме она подхватится автоматически) */
+    background-image: inherit !important;
+    cursor: text;
+}
+
+.search-capsule input {
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 13px;
+    color: var(--text-active);
+    width: 100%;
+    font-family: inherit;
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+.search-capsule:focus-within input {
+    opacity: 1;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+    align-items: center;
+}
+
+/* Иконки и кнопки */
+.icon-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--capsule-radius);
+    background-color: var(--element-bg);
+    border: 1px solid var(--capsule-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--icon-color);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition:
+        background-color 0.2s,
+        border-color 0.2s;
+}
+.icon-btn:hover {
+    background-color: var(--element-hover);
+}
+.icon-btn svg {
+    width: 14px;
+    height: 14px;
+    stroke: var(--icon-color);
+}
+
+.fav-wrapper {
+    display: flex;
+    align-items: center;
+}
+.icon-btn.fav-btn {
+    background-color: var(--fav-bg);
+    border-color: var(--fav-stroke);
+}
+.icon-btn.fav-btn svg {
+    stroke: var(--fav-stroke);
+    fill: transparent;
+}
+
+/* Панель избранного */
+.fav-panel {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background-color: var(--fav-bg);
+    border-radius: var(--capsule-radius);
+    height: 28px;
+    max-width: 0;
+    opacity: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 0;
+    border: 1px solid transparent;
+    transition:
+        max-width 0.35s cubic-bezier(0.25, 0.8, 0.25, 1),
+        opacity 0.2s,
+        padding 0.35s,
+        margin 0.35s,
+        background-color 0.2s,
+        border-color 0.2s;
+}
+.fav-panel.show {
+    max-width: 500px;
+    opacity: 1;
+    padding: 0 8px;
+    margin-left: 6px;
+    border-color: var(--fav-stroke);
+}
+
+.fav-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background-color: var(--app-bg);
+    padding: 2px 8px;
+    border-radius: calc(var(--capsule-radius) - 2px);
+    font-size: 11px;
+    color: var(--text-active);
+    cursor: pointer;
+    max-width: 110px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: background-color 0.2s;
+}
+.fav-item:hover {
+    background-color: var(--element-hover);
+}
+.fav-item img {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+.fav-placeholder {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    color: var(--fav-stroke);
+    padding: 0 4px;
+}
+.fav-placeholder svg {
+    width: 12px;
+    height: 12px;
+    stroke: var(--fav-stroke);
+}
+
+/* Выезжающая панель настроек */
+.settings-wrapper {
+    display: flex;
+    align-items: center;
+}
+.settings-container {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    max-width: 0;
+    opacity: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 0;
+    transition:
+        max-width 0.35s cubic-bezier(0.25, 0.8, 0.25, 1),
+        opacity 0.2s,
+        padding 0.35s,
+        margin 0.35s;
+}
+.settings-container.show {
+    max-width: 600px;
+    opacity: 1;
+    padding: 0 2px;
+    margin-left: 6px;
+}
+
+.settings-capsule {
+    display: flex;
+    align-items: center;
+    background-color: var(--element-bg);
+    border-radius: var(--capsule-radius);
+    height: 28px;
+    padding: 0 12px;
+    border: 1px solid var(--capsule-border);
+    transition:
+        background-color 0.2s,
+        border-color 0.2s;
+}
+.settings-label {
+    font-size: 11px;
+    color: var(--text-color);
+    font-weight: 500;
+    margin-right: 6px;
+    white-space: nowrap;
+}
+.settings-label::after {
+    content: ":";
+}
+
+.start-page-capsule {
+    cursor: pointer;
+    transition: padding 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.minimal-input {
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 11px;
+    color: var(--text-active);
+    font-family: inherit;
+    width: 0;
+    opacity: 0;
+    transition:
+        width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+        opacity 0.2s;
+}
+.start-page-capsule:focus-within .minimal-input {
+    width: 120px;
+    opacity: 1;
+    margin-left: 2px;
+}
+
+.minimal-select {
+    background: transparent;
+    border: none;
+    font-family:
+        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-active);
+    outline: none;
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    padding: 0 14px 0 0;
+    transition: opacity 0.2s;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 24 24' fill='none' stroke='%23333333' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right center;
+}
+body.dark-theme .minimal-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 24 24' fill='none' stroke='%23f5f5f7' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+}
+.minimal-select:hover {
+    opacity: 0.7;
+}
+
+/* КНОПКА ТЕМЫ (Капсула с иконкой) */
+.theme-toggle-btn {
+    background-color: var(--element-bg);
+    border: 1px solid var(--capsule-border);
+    border-radius: var(--capsule-radius);
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    transition:
+        background-color 0.2s,
+        border-color 0.2s;
+    flex-shrink: 0;
+}
+.theme-toggle-btn:hover {
+    background-color: var(--element-hover);
+}
+.theme-toggle-btn svg {
+    stroke: #8e8e93;
+}
+body.dark-theme .theme-toggle-btn svg {
+    stroke: #ffcc00;
+}
+
+/* =========================================================
+   5. ВКЛАДКИ (TABS)
+   ========================================================= */
+.tabs-wrapper {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+    position: relative;
+}
+.tabs-container {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    flex: 1;
+    scroll-behavior: smooth;
+    padding: 0 4px;
+}
+
+.tab {
+    background-color: var(--element-bg);
+    height: 28px;
+    border-radius: var(--capsule-radius);
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text-color);
+    border: 1px solid var(--capsule-border);
+    cursor: pointer;
+    transition:
+        max-width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+        background-color 0.2s,
+        border-color 0.2s;
+    max-width: 140px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+.tab.expanded {
+    max-width: 400px;
+}
+.tab.active {
+    color: var(--text-active);
+    font-weight: 500;
+    background-color: var(--app-bg);
+    border: 1px solid var(--element-hover);
+}
+.tab:not(.active) {
+    opacity: 0.8;
+}
+.tab-favicon {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    flex-shrink: 0;
+    object-fit: cover;
+}
+
+/* Редактируемая ссылка во вкладке */
+.tab-url-input {
+    background: transparent;
+    border: none;
+    color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    width: 100%;
+    outline: none;
+    cursor: pointer;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.tab.expanded .tab-url-input {
+    cursor: text;
+    background-color: var(--element-hover);
+    border-radius: 4px;
+    padding: 2px 6px;
+}
+
+/* Кнопки внутри вкладки */
+.tab-star-btn,
+.tab-reload-btn {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    color: var(--text-color);
+    transition:
+        transform 0.2s,
+        color 0.2s;
+    margin-left: 2px;
+    flex-shrink: 0;
+}
+.tab.expanded .tab-star-btn,
+.tab.expanded .tab-reload-btn {
+    display: flex;
+}
+.tab-star-btn:hover {
+    transform: scale(1.1);
+    color: #ffc107;
+}
+.tab-star-btn svg {
+    width: 12px;
+    height: 12px;
+}
+.tab-reload-btn:hover {
+    transform: scale(1.1);
+    color: var(--text-active);
+}
+.tab-reload-btn svg {
+    width: 10px;
+    height: 10px;
+    margin-top: 1px;
+}
+
+.tab-close-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    color: var(--text-color);
+    transition: 0.2s;
+    margin-left: 2px;
+    flex-shrink: 0;
+}
+.tab-close-btn:hover {
+    background-color: var(--element-hover);
+    color: var(--text-active);
+}
+.tab-close-btn svg {
+    width: 12px;
+    height: 12px;
+}
+
+/* Стрелки прокрутки вкладок */
+.scroll-arrow {
+    display: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: var(--element-bg);
+    border: 1px solid var(--capsule-border);
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 2;
+    flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+.scroll-arrow svg {
+    width: 14px;
+    height: 14px;
+    stroke: var(--icon-color);
+}
+.tabs-wrapper.can-scroll-left .scroll-arrow.left {
+    display: flex;
+    margin-right: 8px;
+}
+.tabs-wrapper.can-scroll-right .scroll-arrow.right {
+    display: flex;
+    margin-left: 8px;
+}
+
+/* =========================================================
+   6. ПУСТОЙ ЭКРАН С ЧАСАМИ И ОБЛАКАМИ
+   ========================================================= */
+.empty-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+        radial-gradient(
+            circle at 50% 15%,
+            rgba(255, 218, 128, 0.15) 0%,
+            rgba(255, 255, 255, 0) 55%
+        ),
+        linear-gradient(180deg, var(--app-bg) 0%, var(--bar-bg) 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+    overflow: hidden;
+    opacity: 1;
+    transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    -webkit-app-region: no-drag;
+}
+body.dark-theme .empty-screen {
+    background:
+        radial-gradient(
+            circle at 50% 15%,
+            rgba(255, 218, 128, 0.05) 0%,
+            rgba(255, 255, 255, 0) 55%
+        ),
+        linear-gradient(180deg, var(--app-bg) 0%, var(--bar-bg) 100%);
+}
+
+.empty-screen.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+.empty-screen.hidden .cloud {
+    animation-play-state: paused;
+    display: none;
+} /* ОПТИМИЗАЦИЯ: глушим облака */
+
+.cloud {
+    position: absolute;
+    color: var(--element-bg);
+    will-change: transform;
+    transform: translateZ(
+        0
+    ); /* ОПТИМИЗАЦИЯ: Форсируем вычисление на GPU, разгружаем CPU */
+    animation: floatCloud linear infinite;
+    filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.03));
+    transition: color 0.2s;
+}
+
+.time-widget {
+    text-align: center;
+    z-index: 2;
+    margin-bottom: 32px;
+}
+.time-text {
+    font-size: 86px;
+    font-weight: 200;
+    color: var(--text-active);
+    letter-spacing: -3px;
+    line-height: 1;
+    transition: color 0.2s;
+}
+.date-text {
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--text-color);
+    margin-top: 12px;
+    transition: color 0.2s;
+}
+
+.empty-hint {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: var(--text-color);
+    font-weight: 400;
+    z-index: 2;
+}
+.empty-hint svg {
+    width: 16px;
+    height: 16px;
+    margin: 0 6px;
+    stroke: var(--text-color);
+}
+
+.cloud-1 {
+    top: 20%;
+    left: -200px;
+    width: 160px;
+    opacity: 0.9;
+    animation-duration: 45s;
+}
+.cloud-2 {
+    top: 50%;
+    left: -300px;
+    width: 240px;
+    opacity: 0.6;
+    animation-duration: 65s;
+    animation-delay: -25s;
+}
+.cloud-3 {
+    top: 15%;
+    left: -150px;
+    width: 110px;
+    opacity: 1;
+    animation-duration: 35s;
+    animation-delay: -15s;
+}
+
+@keyframes floatCloud {
+    0% {
+        transform: translate3d(0, 0, 0);
+    }
+    100% {
+        transform: translate3d(120vw, 0, 0);
+    }
+}
+
+/* =========================================================
+   7. ФУЛСКРИН РЕЖИМ (Мгновенное скрытие без Ghosting-эффекта)
+   ========================================================= */
+
+/* Оставляем плавность только для изменения цвета (темы) */
+.top-bar,
+.bottom-bar-wrapper {
+    transition: background-color 0.2s ease;
+}
+
+/* При фулскрине скрываем панель МГНОВЕННО, чтобы macOS не успела заснять ее в анимации */
+body.fullscreen-mode .top-bar,
+body.fullscreen-mode .bottom-bar-wrapper {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    transition: none !important;
+}
+
+/* 🚀 СТИЛИ ДЛЯ ИСТОРИИ */
+#history-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 48px; /* Окно лежит ровно НАД нижней панелью */
+    background-color: var(--app-bg); /* Берем цвет фона из твоих переменных */
+    z-index: 8000;
+    padding: 24px;
+    display: flex;
+    opacity: 1;
+    transition: opacity 0.2s ease-in-out;
+}
+
+#history-overlay.hidden {
+    opacity: 0;
+    pointer-events: none; /* Чтобы нельзя было кликнуть, когда скрыто */
+}
+
+.history-grid {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    height: 100%;
+    overflow-x: auto; /* Если экран узкий, колонки можно будет скроллить вбок */
+}
+
+.history-col {
+    flex: 1;
+    background-color: #f4f4f5; /* Светло-серый цвет карточки как на макете */
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    min-width: 260px; /* Чтобы карточки не сплющивались слишком сильно */
+}
+
+/* Для темной темы (если она у тебя есть) */
+body.dark-theme .history-col {
+    background-color: #2c2c2e;
+}
+
+.hist-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: #8e8e93; /* Маковский серый цвет текста */
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid rgba(150, 150, 150, 0.1);
+}
+
+.hist-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow-y: auto; /* Скролл внутри колонки, если ссылок много */
+}
+
+.hist-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    color: var(--text-active);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.hist-item:hover .hist-url {
+    text-decoration: underline;
+}
+
+.hist-url {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Обрезает длинный URL троеточием */
+    max-width: 80%;
+}
+
+.hist-time {
+    color: #8e8e93;
+    font-size: 12px;
+}
+
+/* Прячем интерфейс браузера при включенном видео-фулскрине */
+.fullscreen-mode .bottom-bar-wrapper,
+.fullscreen-mode .top-bar {
+    display: none !important;
+}
+
+.fullscreen-mode #tabs-container,
+.fullscreen-mode .webview-container {
+    height: 100vh !important;
+    bottom: 0 !important;
+    top: 0 !important;
+    border-radius: 0 !important;
+}
