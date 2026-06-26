@@ -55,7 +55,6 @@ const emptyScreen = document.getElementById("empty-screen");
 const clockDisplay = document.getElementById("clock-display");
 const dateDisplay = document.getElementById("date-display");
 
-// ОПТИМИЗАЦИЯ: Часы теперь обновляются без лишних аллокаций памяти
 function updateClock() {
   if (!clockDisplay || !dateDisplay) return;
   const now = new Date();
@@ -73,7 +72,6 @@ function updateClock() {
 setInterval(updateClock, 1000);
 updateClock();
 
-// --- ТЕМА ---
 let isDark = localStorage.getItem("theme") === "dark";
 const sunIcon = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`;
 const moonIcon = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="moon-svg"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
@@ -251,7 +249,6 @@ function getContentBounds() {
   };
 }
 
-// ОПТИМИЗАЦИЯ: Дебаунс ресайза для предотвращения зависаний интерфейса при масштабировании
 let resizeTimeout: any;
 const resizeObserver = new ResizeObserver(() => {
   clearTimeout(resizeTimeout);
@@ -453,13 +450,10 @@ window.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => createNewTab("Start Page", startPage), 100);
 });
 
-// ==========================================
-// 🚀 ЛЕНИВЫЙ РАДАР (ОПТИМИЗИРОВАНО)
-// ==========================================
 let tickCount = 0;
 setInterval(async () => {
   tickCount++;
-  // Опрашиваем активную вкладку каждые 250мс для плавности интерфейса, а все фоновые - раз в 2.5 секунды!
+
   const tabsToCheck =
     tickCount % 10 === 0 ? tabs : tabs.filter((t) => t.id === activeTabId);
 
@@ -492,13 +486,10 @@ setInterval(async () => {
         updateTabVisuals(tab.id);
         addToHistory(displayUrl);
       }
-
-      // ВЫЗОВ inject_adblock ПОЛНОСТЬЮ УДАЛЕН. Он жрал память. Стили инжектятся один раз через Rust.
     } catch (e) {}
   }
 }, 250);
 
-// --- ИСТОРИЯ ---
 interface HistoryItem {
   url: string;
   timestamp: number;
@@ -572,7 +563,6 @@ function renderHistory() {
       dateTitleEl.textContent = `${formatDate(d5)} - ${formatDate(d7)}`;
     }
 
-    // ОПТИМИЗАЦИЯ: DocumentFragment чтобы не дергать DOM на каждую ссылку
     const frag = document.createDocumentFragment();
     columns[i].forEach((item) => {
       const date = new Date(item.timestamp);

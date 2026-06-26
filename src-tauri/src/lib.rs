@@ -150,7 +150,6 @@ fn create_tab(
             .user_agent(user_agent)
             .initialization_script(YOUTUBE_FS_PATCH);
 
-    // ОПТИМИЗИРОВАННЫЙ ЭДБЛОК: Меньше циклов, остановка в фоне, кеширование селекторов
     let adblock_script = r#"
         (function() {
             if ('serviceWorker' in navigator) {
@@ -214,7 +213,7 @@ fn create_tab(
             });
 
             const skipAds = () => {
-                // ОПТИМИЗАЦИЯ: Отключаем прожорливый поиск элементов, если пользователь даже не смотрит на вкладку!
+
                 if (document.hidden) return;
 
                 const skipBtns = document.querySelectorAll('.ytp-ad-skip-button, .ytp-ad-skip-button-modern, [class*="skip-ad"], [class*="ad-skip"], .rmp-ad-skip-button');
@@ -238,7 +237,7 @@ fn create_tab(
                 });
             };
 
-            // ОПТИМИЗАЦИЯ: 250мс (4 раза в сек) абсолютно достаточно для скипа рекламы, вместо 50мс (20 раз в сек).
+
             setInterval(skipAds, 250);
 
             window.addEventListener('DOMContentLoaded', () => {
