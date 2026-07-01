@@ -2055,6 +2055,7 @@ name = "minimal-browser"
 version = "0.1.0"
 dependencies = [
  "adblock",
+ "once_cell",
  "serde",
  "serde_json",
  "tauri",

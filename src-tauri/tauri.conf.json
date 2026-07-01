@@ -14,12 +14,12 @@
     "macOSPrivateApi": true,
     "windows": [
       {
-        "title": "Ather-browser",
+        "title": "Ather Browser",
         "width": 1000,
         "height": 700,
         "decorations": true,
         "transparent": false,
-        "hiddenTitle": true,
+        "hiddenTitle": false,
         "backgroundColor": "#ffffff"
       }
     ],
