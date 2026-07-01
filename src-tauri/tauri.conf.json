@@ -18,8 +18,9 @@
         "width": 1000,
         "height": 700,
         "decorations": true,
-        "transparent": true,
-        "hiddenTitle": true
+        "transparent": false,
+        "hiddenTitle": true,
+        "backgroundColor": "#ffffff"
       }
     ],
     "security": {
