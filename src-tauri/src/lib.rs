@@ -313,13 +313,69 @@ pub fn run() {
             get_webview_url,
             reload_webview,
             navigate_tab,
-            toggle_frontend_fullscreen,
+            force_video_fullscreen,
             create_tab,
             resize_tab,
             close_tab,
             show_tab,
-            hide_tab
+            hide_tab,
+            toggle_frontend_fullscreen
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
+}
+
+#[tauri::command]
+fn force_video_fullscreen(app: tauri::AppHandle, id: String) -> Result<(), String> {
+    // Получаем нужную вкладку
+    let webview = app.get_webview(&id).ok_or("Webview not found")?;
+
+    // JS-скрипт, который насильно растягивает видео
+    let js = r#"
+        (function() {
+            // Ищем видео на странице
+            let vid = document.querySelector('video');
+            if (!vid) {
+                // Если видео в iframe, пытаемся найти его там (работает для тех же доменов)
+                let iframes = document.querySelectorAll('iframe');
+                for (let i = 0; i < iframes.length; i++) {
+                    try {
+                        let iframeVid = iframes[i].contentDocument.querySelector('video');
+                        if (iframeVid) { vid = iframeVid; break; }
+                    } catch(e) {} // Игнорируем ошибки CORS
+                }
+            }
+
+            if (!vid) return; // Видео не найдено
+
+            if (document.getElementById('minimal-fs-style')) {
+                // Если уже на весь экран — выключаем
+                document.getElementById('minimal-fs-style').remove();
+                vid.classList.remove('force-fs-minimal');
+            } else {
+                // Если нет — растягиваем!
+                let style = document.createElement('style');
+                style.id = 'minimal-fs-style';
+                style.innerHTML = `
+                    .force-fs-minimal {
+                        position: fixed !important;
+                        top: 0 !important;
+                        left: 0 !important;
+                        width: 100vw !important;
+                        height: 100vh !important;
+                        z-index: 2147483647 !important;
+                        background: black !important;
+                        object-fit: contain !important;
+                        margin: 0 !important;
+                        padding: 0 !important;
+                    }
+                `;
+                document.head.appendChild(style);
+                vid.classList.add('force-fs-minimal');
+            }
+        })();
+    "#;
+
+    webview.eval(js).map_err(|e| e.to_string())?;
+    Ok(())
 }

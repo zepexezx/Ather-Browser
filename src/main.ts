@@ -591,3 +591,30 @@ document.getElementById("btn-history")?.addEventListener("click", () => {
     }
   }
 });
+
+// Получаем нашу новую кнопку
+const btnForceFs = document.getElementById("btn-force-fs");
+
+btnForceFs?.addEventListener("click", async () => {
+  if (!activeTabId) return;
+
+  const isCurrentlyFs = document.body.classList.contains("fullscreen-mode");
+
+  if (!isCurrentlyFs) {
+    // 1. Скрываем интерфейс браузера
+    document.body.classList.add("fullscreen-mode");
+    // 2. Делаем окно Tauri на весь экран (максимизируем)
+    await appWindow.setFullscreen(true);
+    // 3. Вызываем наш Rust-скрипт, чтобы растянуть само видео
+    await invoke("force_video_fullscreen", { id: activeTabId });
+
+    // Даем сигнал вкладкам пересчитать размер
+    window.dispatchEvent(new Event("resize"));
+  } else {
+    // Возвращаем всё обратно
+    document.body.classList.remove("fullscreen-mode");
+    await appWindow.setFullscreen(false);
+    await invoke("force_video_fullscreen", { id: activeTabId });
+    window.dispatchEvent(new Event("resize"));
+  }
+});

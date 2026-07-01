@@ -634,20 +634,6 @@ body.dark-theme .empty-screen {
     opacity: 0;
     pointer-events: none;
 }
-.empty-screen.hidden .cloud {
-    animation-play-state: paused;
-    display: none;
-}
-
-.cloud {
-    position: absolute;
-    color: var(--element-bg);
-    will-change: transform;
-    transform: translateZ(0);
-    animation: floatCloud linear infinite;
-    filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.03));
-    transition: color 0.2s;
-}
 
 .time-widget {
     text-align: center;
@@ -683,39 +669,6 @@ body.dark-theme .empty-screen {
     height: 16px;
     margin: 0 6px;
     stroke: var(--text-color);
-}
-
-.cloud-1 {
-    top: 20%;
-    left: -200px;
-    width: 160px;
-    opacity: 0.9;
-    animation-duration: 45s;
-}
-.cloud-2 {
-    top: 50%;
-    left: -300px;
-    width: 240px;
-    opacity: 0.6;
-    animation-duration: 65s;
-    animation-delay: -25s;
-}
-.cloud-3 {
-    top: 15%;
-    left: -150px;
-    width: 110px;
-    opacity: 1;
-    animation-duration: 35s;
-    animation-delay: -15s;
-}
-
-@keyframes floatCloud {
-    0% {
-        transform: translate3d(0, 0, 0);
-    }
-    100% {
-        transform: translate3d(120vw, 0, 0);
-    }
 }
 
 .top-bar,
